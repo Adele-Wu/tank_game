@@ -4,14 +4,20 @@ import edu.csc413.tankgame.model.*;
 import edu.csc413.tankgame.view.*;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameDriver {
     private final MainView mainView;
     private final RunGameView runGameView;
+    //    private final List<Tank> entities;
+    private final GameWorld gameWorld;
 
     public GameDriver() {
         mainView = new MainView(this::startMenuActionPerformed);
         runGameView = mainView.getRunGameView();
+//        entities = new ArrayList<>();
+        gameWorld = new GameWorld();
     }
 
     public void start() {
@@ -50,6 +56,60 @@ public class GameDriver {
      */
     private void setUpGame() {
         // TODO: Implement.
+        List<WallInformation> wallInfos = WallInformation.readWalls();
+
+//        x = 100.0;
+//        y = 100.0;
+//        angle = Math.toRadians(0.0);
+//
+//        runGameView.addSprite("tank-1", "player-tank.png", x, y, angle);
+
+        PlayerTank playerTank =
+                new PlayerTank(
+                        Constants.PLAYER_TANK_ID,
+                        Constants.PLAYER_TANK_INITIAL_X,
+                        Constants.PLAYER_TANK_INITIAL_Y,
+                        Constants.PLAYER_TANK_INITIAL_ANGLE);
+
+//        playerTank.move();
+//        aiTank1.move();
+//        aiTank2.move();
+//        shell1.move();
+
+        DumbAiTank aiTank1 =
+                new DumbAiTank(
+                        Constants.AI_TANK_1_ID,
+                        Constants.AI_TANK_1_INITIAL_X,
+                        Constants.AI_TANK_1_INITIAL_Y,
+                        Constants.AI_TANK_1_INITIAL_ANGLE);
+
+//        Entity shell = new Shell("shell-id", playerTank.getX(), playerTank.getY(), Math.toRadians(45.0));
+
+        gameWorld.addEntity(playerTank);
+        gameWorld.addEntity(aiTank1);
+//        gameWorld.addEntity(shell);
+
+        runGameView.addSprite(
+                playerTank.getId(),
+                runGameView.PLAYER_TANK_IMAGE_FILE,
+                playerTank.getX(),
+                playerTank.getY(),
+                playerTank.getAngle());
+
+        runGameView.addSprite(
+                aiTank1.getId(),
+                RunGameView.AI_TANK_IMAGE_FILE,
+                aiTank1.getX(),
+                aiTank1.getY(),
+                aiTank1.getAngle());
+
+//        runGameView.addSprite(
+//                shell.getId(),
+//                RunGameView.SHELL_IMAGE_FILE,
+//                shell.getX(),
+//                shell.getY(),
+//                shell.getAngle());
+
     }
 
     /**
@@ -59,7 +119,87 @@ public class GameDriver {
      */
     private boolean updateGame() {
         // TODO: Implement.
+
+        // tank moving
+//        x += 2.0;
+//        y += 1.0;
+//        angle += 1.0;
+//
+//        runGameView.setSpriteLocationAndAngle("tank-1", x, y, angle);
+
+        // keyboard reading
+//        KeyboardReader keyboard = KeyboardReader.instance();
+//        if (keyboard.upPressed())
+//        {
+//            System.out.println("up is pressed");
+//        }
+//        if (keyboard.downPressed())
+//        {
+//            System.out.println("down is pressed");
+//        }
+//        if (keyboard.leftPressed())
+//        {
+//            System.out.println("left is pressed");
+//        }
+//        if (keyboard.rightPressed())
+//        {
+//            System.out.println("right is pressed");
+//        }
+
+//        for(Tank entity: gameWorld.getEntities()) {
+//            entity.move(gameWorld);
+//        }
+//
+//        for (Tank entity: gameWorld.getEntities()) {
+//            runGameView.setSpriteLocationAndAngle(entity.getId(), entity.getX(), entity.getY(), entity.getAngle());
+//        }
+
+// ---------------------------------------------------------------------------------------------------------------
+//        // from Dawson's lecture, doesnt fully work. make it work
+//        ArrayList<Entity> originalEntities = new ArrayList<>(gameWorld.getEntities()); //creates copy of list
+//        for(Entity entity: originalEntities) {  //iterates the copy
+//            entity.move(gameWorld); // moves original
+//        }
+// --------------------------------------------------------------------------------------------------------------
+
+        // when shells are added, dont add them to the entities list directly
+        // put them in a separate temporary list instead.
+        // process (addSprite) that separate temp list, and then move them all to main list
+
+        for (Entity entity: new ArrayList<>(gameWorld.getEntities())){
+            entity.move(gameWorld);
+        }
+
+        List<Entity> tempShells = gameWorld.getTempEntities();
+        for (Entity newShellEntity : tempShells) {
+            runGameView.addSprite(
+                    newShellEntity.getId(),
+                    RunGameView.SHELL_IMAGE_FILE,
+                    newShellEntity.getX(),
+                    newShellEntity.getY(),
+                    newShellEntity.getAngle());
+        }
+
+        for (Entity entity : tempShells) {
+            gameWorld.addEntity(entity);
+        }
+
+        tempShells.removeAll(tempShells);
+        //tempShells.remove(tempShells);
+
+        for (Entity entity : gameWorld.getEntities()) {
+            runGameView.setSpriteLocationAndAngle(entity.getId(), entity.getX(), entity.getY(), entity.getAngle());
+        }
+
+// ---------------------------------------------------------------------------------------------------------------
+
+        for (Entity entity : gameWorld.getGarbageList()) {
+            entity.checkBounds(gameWorld);
+            gameWorld.removeShell(entity);
+        }
+
         return true;
+
     }
 
     /**

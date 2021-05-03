@@ -1,7 +1,7 @@
 # CSC 413 Term Project README
 
-Name:
+Name: Adele Wu
 
-Email:
+Email: awu16@mail.sfsu.edu
 
 Extra Features:

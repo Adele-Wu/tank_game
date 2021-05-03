@@ -12,6 +12,7 @@ public abstract class Tank extends Entity {
     private double angle;
 
     public Tank(String id, double x, double y, double angle) {
+        super(id, x, y, angle);
         this.id = id;
         this.x = x;
         this.y = y;
@@ -33,6 +34,7 @@ public abstract class Tank extends Entity {
     public double getAngle() {
         return angle;
     }
+
 
     // TODO: The methods below are provided so you don't have to do the math for movement. You should call these methods
     //       from the various subclasses of Entity in their implementations of move.
@@ -69,5 +71,19 @@ public abstract class Tank extends Entity {
 
     private double getShellAngle() {
         return getAngle();
+    }
+
+    void fireShell(GameWorld gameWorld) {
+        Shell shell = new Shell(getId(), getShellX(), getShellY(), getShellAngle());
+        gameWorld.addShell(shell);
+    }
+
+    @Override
+    public void checkBounds(GameWorld gameWorld) {
+        if (getX() < Constants.TANK_X_LOWER_BOUND || getX() > Constants.TANK_X_UPPER_BOUND ||
+                getY() < Constants.TANK_Y_LOWER_BOUND || getY() > Constants.TANK_Y_UPPER_BOUND) {
+        }
+
+        //push
     }
 }
