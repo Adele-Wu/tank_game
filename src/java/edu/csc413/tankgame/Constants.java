@@ -1,5 +1,7 @@
 package edu.csc413.tankgame;
 
+import edu.csc413.tankgame.view.MainView;
+
 public class Constants {
     public static final double TANK_WIDTH = 55.0;
     public static final double TANK_HEIGHT = 47.0;
@@ -38,4 +40,12 @@ public class Constants {
     public static final double SHELL_X_UPPER_BOUND = 1024.0;
     public static final double SHELL_Y_LOWER_BOUND = -10.0;
     public static final double SHELL_Y_UPPER_BOUND = 768.0;
+
+    public static final String POWERUP1_ID = "powerup1";
+    public static final double POWERUP1_X = 70.0;
+    public static final double POWERUP1_Y = 110.0;
+
+    public static final String POWERUP2_ID = "powerup2";
+    public static final double POWERUP2_X = 900.0;
+    public static final double POWERUP2_Y = 600.0;
 }

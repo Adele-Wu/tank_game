@@ -10,6 +10,13 @@ public abstract class Entity {
     private double y;
     private double angle;
 
+    public Entity(String id, double x, double y, double angle) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.angle = angle;
+    }
+
     public String getId() {
         return id;
     }
@@ -26,11 +33,12 @@ public abstract class Entity {
         return angle;
     }
 
-    public Entity(String id, double x, double y, double angle) {
-        this.id = id;
+    public void setX(double x) {
         this.x = x;
+    }
+
+    public void setY(double y) {
         this.y = y;
-        this.angle = angle;
     }
 
     protected void moveForward(double movementSpeed) {
@@ -40,9 +48,8 @@ public abstract class Entity {
 
     /** All entities can move, even if the details of their move logic may vary based on the specific type of Entity. */
     public abstract void move(GameWorld gameWorld);
-
-    //public abstract void move();
-
-    public abstract void checkBounds(GameWorld gameWorld);
+    public abstract double getXBound();
+    public abstract double getYBound();
+    public abstract boolean checkBounds();
 
 }

@@ -1,5 +1,8 @@
 package edu.csc413.tankgame.view;
 
+import edu.csc413.tankgame.GameDriver;
+import edu.csc413.tankgame.model.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -16,10 +19,16 @@ import java.util.Optional;
  * setSpriteLocationAndAngle below for methods you will need to call.
  */
 public class RunGameView extends JPanel {
+    private PlayerTank pt;
+    private SmartAiTank st;
+    private DumbAiTank dt;
+
     // Constants for the image file names for various sprites.
     public static final String PLAYER_TANK_IMAGE_FILE = "player-tank.png";
     public static final String AI_TANK_IMAGE_FILE = "ai-tank.png";
     public static final String SHELL_IMAGE_FILE = "shell.png";
+
+    public static final String POWERUP_IMAGE_FILE = "powerup.png";
 
     static final Dimension SCREEN_DIMENSIONS = new Dimension(1024, 768);
 
@@ -136,5 +145,58 @@ public class RunGameView extends JPanel {
         }
 
         g.drawImage(worldImage, 0, 0, null);
+
+        // Display life
+        g.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+
+        g.setColor(Color.green);
+        g.drawString("Player: ", 30, 30);
+        g.fillRect(90, 10, pt.getHealth() * 20, 30);
+        g.drawRect(90, 10, 100, 30);
+
+        g.setColor(Color.red);
+        g.drawString("Smart AiTank: ", 380, 30);
+        g.fillRect(500, 10, st.getHealth() * 20, 30);
+        g.drawRect(500, 10, 100, 30);
+
+        g.setColor(Color.red);
+        g.drawString("Dumb AiTank: ", 780, 30);
+        g.fillRect(900, 10, dt.getHealth() * 20, 30);
+        g.drawRect(900, 10, 100, 30);
+
+        if (pt.getHealth() == 1) {
+
+            JFrame f;
+            JLabel l;  // label to display text
+
+            f = new JFrame("YOU LOSE");
+            ImageIcon i = new ImageIcon("resources/lose.png");
+
+            l = new JLabel(i);  // create a label to display image
+            JPanel p = new JPanel();    // create a panel
+
+            p.add(l);   // add label to panel
+            f.add(p);   // add panel to frame
+
+            f.setSize(500, 500); // set the size of frame
+
+            f.show();
+        }
+
+        if (st.getHealth() == 1 && dt.getHealth() == 1) {
+
+            JFrame f;
+            JLabel l;
+
+            f = new JFrame("YOU WIN");
+            ImageIcon i = new ImageIcon("resources/win.png");
+            l = new JLabel(i);
+            JPanel p = new JPanel();
+            p.add(l);
+            f.add(p);
+            f.setSize(500, 500);
+
+            f.show();
+        }
     }
 }

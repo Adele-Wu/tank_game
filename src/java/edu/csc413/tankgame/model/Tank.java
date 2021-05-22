@@ -1,6 +1,7 @@
 package edu.csc413.tankgame.model;
 
 import edu.csc413.tankgame.Constants;
+import edu.csc413.tankgame.view.Sounds;
 
 /** Entity class representing all tanks in the game. */
 public abstract class Tank extends Entity {
@@ -9,7 +10,13 @@ public abstract class Tank extends Entity {
     private String id;
     private double x;
     private double y;
+    protected double xprevious;
+    protected double yprevious;
     private double angle;
+
+    boolean shot = false;
+    private int coolDownTime = 50;
+    private int coolDownLeft = coolDownTime;
 
     public Tank(String id, double x, double y, double angle) {
         super(id, x, y, angle);
@@ -34,7 +41,6 @@ public abstract class Tank extends Entity {
     public double getAngle() {
         return angle;
     }
-
 
     // TODO: The methods below are provided so you don't have to do the math for movement. You should call these methods
     //       from the various subclasses of Entity in their implementations of move.
@@ -61,6 +67,14 @@ public abstract class Tank extends Entity {
     // is created by this tank. It needs a slight offset so it appears from the front of the tank,
     // even if the tank is rotated. The shell should have the same angle as the tank.
 
+    public void setX(double x){
+        this.x = x;
+    }
+
+    public void setY(double y){
+        this.y = y;
+    }
+
     private double getShellX() {
         return getX() + Constants.TANK_WIDTH / 2 + 45.0 * Math.cos(getAngle()) - Constants.SHELL_WIDTH / 2;
     }
@@ -73,17 +87,52 @@ public abstract class Tank extends Entity {
         return getAngle();
     }
 
+    private Sounds whoosh;
+
     void fireShell(GameWorld gameWorld) {
-        Shell shell = new Shell(getId(), getShellX(), getShellY(), getShellAngle());
-        gameWorld.addShell(shell);
+        if (shot == true) {
+            Shell shell = new Shell(getId(), getShellX(), getShellY(), getShellAngle());
+            gameWorld.addShell(shell);
+            shot = false;
+            coolDownLeft = coolDownTime;
+            whoosh.clipSound1();
+        }
+    }
+
+    void decrementCoolDown(){
+        if(shot == false){
+            coolDownLeft--;
+            if(coolDownLeft < 0){
+                shot = true;
+                System.out.println(shot);
+            }
+        }
     }
 
     @Override
-    public void checkBounds(GameWorld gameWorld) {
-        if (getX() < Constants.TANK_X_LOWER_BOUND || getX() > Constants.TANK_X_UPPER_BOUND ||
-                getY() < Constants.TANK_Y_LOWER_BOUND || getY() > Constants.TANK_Y_UPPER_BOUND) {
-        }
+    public double getXBound() {
+        return getX() + Constants.TANK_WIDTH;
+    }
 
-        //push
+    @Override
+    public double getYBound() {
+        return getY() + Constants.TANK_HEIGHT;
+    }
+
+    @Override
+    public boolean checkBounds() {
+        if (getX() > Constants.TANK_X_UPPER_BOUND) {
+            setX(Constants.TANK_X_UPPER_BOUND);
+        }
+        if (getX() < Constants.TANK_X_LOWER_BOUND) {
+            setX(Constants.TANK_X_LOWER_BOUND);
+        }
+        if (getY() > Constants.TANK_Y_UPPER_BOUND) {
+            setY(Constants.TANK_Y_UPPER_BOUND);
+        }
+        if (getY() < Constants.TANK_Y_LOWER_BOUND) {
+            setY(Constants.TANK_Y_LOWER_BOUND);
+        }
+        return false;
     }
 }
