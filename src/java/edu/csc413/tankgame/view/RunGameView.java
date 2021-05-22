@@ -164,7 +164,7 @@ public class RunGameView extends JPanel {
         g.fillRect(900, 10, dt.getHealth() * 20, 30);
         g.drawRect(900, 10, 100, 30);
 
-        if (pt.getHealth() == 1) {
+        if (pt.getHealth() == 0) {
 
             JFrame f;
             JLabel l;  // label to display text
@@ -183,7 +183,7 @@ public class RunGameView extends JPanel {
             f.show();
         }
 
-        if (st.getHealth() == 1 && dt.getHealth() == 1) {
+        if (st.getHealth() == 0 && dt.getHealth() == 0) {
 
             JFrame f;
             JLabel l;

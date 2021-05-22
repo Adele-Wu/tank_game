@@ -241,7 +241,7 @@ public class GameDriver {
     public void ShellToPlayerTankCollide(Entity e1, Entity e2, GameWorld gameWorld) {
         List<Entity> entitiesToRemove = new ArrayList<>();
         PlayerTank tank = (PlayerTank) e1;
-        if(tank.getHealth() == 1){
+        if(tank.getHealth() == 0){
             entitiesToRemove.add(e1);
             runGameView.addAnimation(
                     RunGameView.BIG_EXPLOSION_ANIMATION,
@@ -269,7 +269,7 @@ public class GameDriver {
     public void ShellToSmartTankCollide(Entity e1, Entity e2, GameWorld gameWorld) {
         List<Entity> entitiesToRemove = new ArrayList<>();
         SmartAiTank tank = (SmartAiTank) e1;
-        if(tank.getHealth() == 1){
+        if(tank.getHealth() == 0){
             entitiesToRemove.add(e1);
             runGameView.addAnimation(
                     RunGameView.BIG_EXPLOSION_ANIMATION,
@@ -297,7 +297,7 @@ public class GameDriver {
     public void ShellToDumbTankCollide(Entity e1, Entity e2, GameWorld gameWorld) {
         List<Entity> entitiesToRemove = new ArrayList<>();
         DumbAiTank tank = (DumbAiTank) e1;
-        if(tank.getHealth() == 1){
+        if(tank.getHealth() == 0){
             entitiesToRemove.add(e1);
             runGameView.addAnimation(
                     RunGameView.BIG_EXPLOSION_ANIMATION,
@@ -477,7 +477,7 @@ public class GameDriver {
     }
 
     public boolean hasDied(){
-        if (PlayerTank.getHealth()==1 || SmartAiTank.getHealth()==1 && DumbAiTank.getHealth()==1) {
+        if (PlayerTank.getHealth() == 0 || SmartAiTank.getHealth() == 0 && DumbAiTank.getHealth() == 0) {
             return true;
         }
         return false;
